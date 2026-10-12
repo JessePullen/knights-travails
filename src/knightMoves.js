@@ -1,22 +1,18 @@
 export default function knightMoves(start, end) {
-	return validMove(start, end);
+	return validMoves(start);
 }
 
-function validMove(start, end) {
-	if (start[0] < 0 || start[0] > 7) {
-		return false;
+function validMoves(startPos) {
+	const nextMoves = [];
+
+	if (startPos[0] < 0 || startPos[0] > 7) {
+		return nextMoves;
 	}
-	if (start[1] < 0 || start[1] > 7) {
-		return false;
-	}
-	if (end[0] < 0 || end[0] > 7) {
-		return false;
-	}
-	if (end[1] < 0 || end[1] > 7) {
-		return false;
+	if (startPos[1] < 0 || startPos[1] > 7) {
+		return nextMoves;
 	}
 
-	const moves = [
+	const moveSet = [
 		[1, 2],
 		[1, -2],
 		[-1, 2],
@@ -27,12 +23,15 @@ function validMove(start, end) {
 		[-2, -1],
 	];
 
-	for (const move of moves) {
-		if (start[0] + move[0] === end[0] && start[1] + move[1] === end[1]) {
-			return true;
+	for (const move of moveSet) {
+		const xPos = startPos[0] + move[0];
+		const yPos = startPos[1] + move[1];
+		if (xPos >= 0 && xPos <= 7 && yPos >= 0 && yPos <= 7) {
+			nextMoves.push([xPos, yPos]);
 		}
 	}
-	return false;
+
+	return nextMoves;
 }
 
-export { validMove };
+export { validMoves };

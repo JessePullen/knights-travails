@@ -1,28 +1,67 @@
 import knightMoves from '../src/knightMoves.js';
-import { validMove } from '../src/knightMoves.js';
+import { validMoves } from '../src/knightMoves.js';
 
-describe('validMove', () => {
-	test('should return true for a valid knight move', () => {
-		expect(validMove([0, 0], [1, 2])).toBe(true);
+describe('validMoves', () => {
+	test('should return all eight valid moves from the centre of the board', () => {
+		const result = validMoves([3, 3]);
+
+		expect(result).toHaveLength(8);
+		expect(result).toEqual(
+			expect.arrayContaining([
+				[4, 5],
+				[4, 1],
+				[2, 5],
+				[2, 1],
+				[5, 4],
+				[5, 2],
+				[1, 4],
+				[1, 2],
+			]),
+		);
 	});
 
-	test('should return false for an invalid knight move', () => {
-		expect(validMove([0, 0], [1, 1])).toBe(false);
+	test('should return only two valid moves from a corner', () => {
+		const result = validMoves([0, 0]);
+
+		expect(result).toHaveLength(2);
+		expect(result).toEqual(
+			expect.arrayContaining([
+				[1, 2],
+				[2, 1],
+			]),
+		);
 	});
 
-	test('should return false when the start and end positions are the same', () => {
-		expect(validMove([3, 3], [3, 3])).toBe(false);
+	test('should exclude moves that go outside the board', () => {
+		const result = validMoves([0, 1]);
+
+		expect(result).toHaveLength(3);
+		expect(result).toEqual(
+			expect.arrayContaining([
+				[1, 3],
+				[2, 2],
+				[2, 0],
+			]),
+		);
 	});
 
-	test('should return an error when the start position is outside the board', () => {
-		expect(validMove([-1, 0], [1, 2])).toBe(false);
+	test('should return all valid moves from the opposite corner', () => {
+		const result = validMoves([7, 7]);
+
+		expect(result).toHaveLength(2);
+		expect(result).toEqual(
+			expect.arrayContaining([
+				[5, 6],
+				[6, 5],
+			]),
+		);
 	});
 
-	test('should return an error when the end position is outside the board', () => {
-		expect(validMove([0, 0], [8, 2])).toBe(false);
+	test('should return an empty array when the starting position is outside the board', () => {
+		expect(validMoves([-1, 0])).toEqual([]);
 	});
 
-	test('should return true for a valid move from the edge of the board', () => {
-		expect(validMove([7, 7], [5, 6])).toBe(true);
+	test('should return an empty array when the starting position is outside the board on the upper boundary', () => {
+		expect(validMoves([8, 3])).toEqual([]);
 	});
 });
